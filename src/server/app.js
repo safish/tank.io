@@ -5,25 +5,6 @@ const
 
 let id = 0
 
-class Bullet {
-  constructor(owner) {
-    this.x = 0
-    this.y = 0
-    Object.defineProperties(this, {
-
-      speed: {
-        value: 1,
-        enumerable: false
-      },
-
-      rotation: {
-        value: 0,
-        enumerable: false
-      }
-    })
-  }
-}
-
 class State {
   constructor() {
     this.player = {}
