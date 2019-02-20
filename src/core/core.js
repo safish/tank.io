@@ -36,7 +36,7 @@ const app = new PIXI.Application({
   sharedTicker: true,
   autoResize: false,
   antialias: false,
-  backgroundColor: 0xcddc39
+  backgroundColor: 0xffffff
 })
 
 app.align = function(node, option={}) {
