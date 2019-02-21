@@ -1,4 +1,5 @@
 export default {
   player: {},
-  bullet: {}
+  bullet: {},
+  frames: []
 }

@@ -6,9 +6,13 @@ const
 class Playground extends Room {
   onInit() {
     this.maxClients = 2
+    this.setState({
+      player: {},
+      frames: []
+    })
   }
 
-  onJoin() {
+  onJoin(client) {
 
   }
 
@@ -16,8 +20,8 @@ class Playground extends Room {
 
   }
 
-  onMessage() {
-
+  onMessage(client, data) {
+    console.log(data)
   }
 }
 
