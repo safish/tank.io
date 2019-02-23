@@ -24,19 +24,19 @@ class Playground extends Room {
 
     const frames = this.frames
 
-    frames[this.index] = frames[this.index] || []
+    frames[this.index] = frames[this.index] ||
+     Object.entries(this.operation)
 
     /* 同步最后操作 */
-    for (const id in this.operation) {
-      frames[this.index].push([
-        id, this.operation[id]
-      ])
-    }
+    // if (!frames[this.index].length) {
+    //   for (const id in this.operation) {
+    //     frames[this.index].push([
+    //       id, this.operation[id]
+    //     ])
+    //   }
+    // }
 
-    this.broadcast([
-      this.index,
-      frames[this.index]
-    ])
+    this.broadcast(frames[this.index])
 
     this.index += 3
 
@@ -51,7 +51,19 @@ class Playground extends Room {
   }
 
   onLeave(client) {
-    delete this.operation[client.sessionId]
+    const id = client.sessionId
+
+    delete this.operation[id]
+
+    for (let i = 0; i < this.frames.length; i++) {
+      const frame = this.frames[i]
+      frame && (this.frames[i] = frame.filter(item => item[0] !== id))
+    }
+
+    this.broadcast({
+      id,
+      type: 'leave',
+    })
   }
 
   onMessage(client, data) {

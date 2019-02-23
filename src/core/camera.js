@@ -22,8 +22,7 @@ export default class Camera extends PIXI.Container {
   focus(t) {
     const
       x = core.screen.width * .5 + this.offset.x,
-      y = core.screen.height * .5 + this.offset.y,
-      damping = 1 - Math.exp(-t / 10)
+      y = core.screen.height * .5 + this.offset.y
 
     this.target.getGlobalPosition(this.goal)
     this.goal.x = x - this.goal.x

@@ -1,4 +1,4 @@
-import core, {monitor} from '../core'
+import core, {monitor, Camera} from '../core'
 import {Tank, store, Bullet, gamepad} from '../components'
 
 export default {
@@ -6,11 +6,18 @@ export default {
 
   init() {
     this.container = new PIXI.Container()
+    this.camera = new Camera()
+    this.map = new PIXI.extras.Tilemap({
+      map: core.loader.resources.map.data,
+      tile: PIXI.Texture.from('tile.png')
+    })
     // this.player = this.addTank({
     //   body: 'body.blue.png',
     //   barrel: 'barrel.blue.png'
     // })
-    // this.container.addChild(gamepad)
+    this.camera.set({limitable: true, map: this.map})
+    this.camera.addChild(this.map)
+    this.container.addChild(this.camera)
   },
 
   addTank({body, barrel}) {
@@ -38,10 +45,9 @@ export default {
 
       if (!tank.parent) {
         this.tank[id] = tank
-        this.container.addChild(tank)
+        id === store.id && this.camera.follow(tank)
+        this.camera.addChild(tank)
       }
-
-      // tank.operate(store.player[id])
     }
 
     for (const id in this.tank) {
@@ -49,16 +55,18 @@ export default {
         this.tank[id].destroy({children: true})
         delete this.tank[id]
       } else {
-        this.tank[id].track()
+        this.tank[id].update()
       }
     }
+
+    this.camera.update()
   },
 
   show() {
     this.init()
     this.listen()
-    core.ticker.add(this.update.bind(this))
     core.stage.addChild(this.container)
+
   },
 
   hide() {

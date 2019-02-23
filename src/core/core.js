@@ -1,3 +1,5 @@
+import './tilemap'
+
 const view = document.querySelector('canvas')
 
 let {
