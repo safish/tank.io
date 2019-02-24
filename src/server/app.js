@@ -5,7 +5,7 @@ const
 
 class Playground extends Room {
   onInit() {
-    this.maxClients = 2
+    this.maxClients = 8
     this.index = 3
     this.frames = [[]]
     this.disposed = false

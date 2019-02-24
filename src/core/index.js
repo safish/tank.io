@@ -16,6 +16,7 @@ zoom.mix = [
 
 export default core
 export Camera from './camera'
+export * as engine from './engine'
 export {
   zoom,
   design,

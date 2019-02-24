@@ -27,6 +27,7 @@
     "core-js": "^2.6.5",
     "html-webpack-plugin": "^3.2.0",
     "pixi.js": "^4.8.6",
+    "planck-js": "^0.3.3",
     "popmotion": "^8.6.3",
     "raw-loader": "^1.0.0",
     "webpack": "^4.29.5",

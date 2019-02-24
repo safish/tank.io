@@ -11,4 +11,5 @@ export default class extends PIXI.Sprite {
     this.x -= Math.sin(this.rotation) * this.speed
     this.y += Math.cos(this.rotation) * this.speed
   }
+
 }

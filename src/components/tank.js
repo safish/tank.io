@@ -1,5 +1,5 @@
+import {engine} from '../core'
 import Bullet from './bullet'
-import store from './store'
 
 export default class extends PIXI.Sprite {
   #bullets = []
@@ -19,6 +19,15 @@ export default class extends PIXI.Sprite {
     })
     this.anchor.set(.5)
     this.addChild(this.barrel, this.text)
+
+    this
+      .addBody({
+        fixedRotation: true
+      })
+      .addBox({
+        width: this.width,
+        height: this.height
+      })
   }
 
   shoot() {
@@ -30,6 +39,7 @@ export default class extends PIXI.Sprite {
       speed: 12,
       rotation: this.rotation
     })
+    bullet.tag = this.id
     bullet.position.copy(this.position)
     this.parent.addChild(bullet)
     this.#bullets.push(bullet)
@@ -38,6 +48,13 @@ export default class extends PIXI.Sprite {
   run(speed, rotation) {
     this.rotation = rotation === undefined ? this.rotation : rotation - Math.PI / 2
     this.speed = speed
+
+    this.body.setLinearVelocity({
+      x: -Math.sin(this.rotation) * this.speed,
+      y: Math.cos(this.rotation) * this.speed
+    })
+
+    this.body.setAngle(this.rotation)
   }
 
   operate(code) {
@@ -49,20 +66,28 @@ export default class extends PIXI.Sprite {
     if (code & 16) this.shoot()
 
 
-    this.x -= Math.sin(this.rotation) * this.speed
-    this.y += Math.cos(this.rotation) * this.speed
+    // this.x -= Math.sin(this.rotation) * this.speed
+    // this.y += Math.cos(this.rotation) * this.speed
   }
 
   update() {
     const
-      bullets = this.#bullets
+      parent = this.parent
 
 
     // this.x += (shadow.x - this.x) * .3 * ratio
     // this.y += (shadow.y - this.y) * .3 * ratio
 
-    bullets.forEach(bullet => {
+    this.#bullets = this.#bullets.filter(bullet => {
       bullet.update()
+
+      if (bullet.x > 0 && bullet.y > 0 &&
+        bullet.x < parent.width && bullet.y < parent.height) {
+        return true
+      } else {
+        bullet.destroy()
+        return false
+      }
     })
   }
 }
