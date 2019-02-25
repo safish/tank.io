@@ -6,8 +6,8 @@ const
 class Playground extends Room {
   onInit() {
     this.maxClients = 8
-    this.index = 3
-    this.frames = [[]]
+    this.index = 0
+    this.frames = []
     this.disposed = false
     this.operation = {}
     this.update()
@@ -26,17 +26,7 @@ class Playground extends Room {
 
     frames[this.index] = frames[this.index] || Object.entries(this.operation)
 
-    /* 同步最后操作 */
-    // if (!frames[this.index].length) {
-    //   for (const id in this.operation) {
-    //     frames[this.index].push([
-    //       id, this.operation[id]
-    //     ])
-    //   }
-    // }
-
     this.broadcast(frames[this.index])
-
     this.index += 3
 
     setTimeout(this.update.bind(this), 50)

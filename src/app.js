@@ -1,8 +1,7 @@
 import * as colyseus from 'colyseus.js'
+import {store} from './components'
 import {prepare, game} from './scenes'
 import core, {monitor} from './core'
-import {store} from './components'
-
 
 // prepare().then(() => {
 //   game.show()
@@ -11,7 +10,7 @@ prepare().then(() => {
   game.show()
 
 const
-  client = new colyseus.Client('ws://172.16.48.242:9000'),
+  client = new colyseus.Client('ws://192.168.0.106:9000'),
   key = new Proxy(
     {
       32: 0,
@@ -31,6 +30,7 @@ const
     }
   )
 
+let delta, last = performance.now()
 
 client.onOpen.add(err => {
   const room = client.join('playground')
@@ -50,6 +50,7 @@ client.onOpen.add(err => {
           last = store.frames[i] || last
           store.frames[i] = last
         }
+        console.log('sync', store.frames)
         break
       }
 
@@ -63,6 +64,7 @@ client.onOpen.add(err => {
       }
 
       default: {
+        console.log('step')
         store.frames.push(data, data, data)
         break
       }
@@ -94,21 +96,14 @@ window.addEventListener('keyup', ev => {
 const node = document.querySelector('i')
 
 setInterval(() => {
-  node.innerText = `${store.frames.length} FPS: ${core.ticker.FPS}`
+  node.innerText = `${store.frames.length} ${delta}`
 }, 1e3)
 
 core.ticker.add(() => {
   if (!store.joined) return
-  step()
-  while (store.frames.length > 3) step()
+  store.frames.length > 1 && step()
+  while (store.frames.length > 6) step()
 })
-
-// !function loop() {
-//   if (!store.joined) return
-//   step()
-//   while (store.frames.length > 3) step()
-//   setTimeout(loop, 16)
-// }()
 
 function step() {
   const frame = store.frames.shift()
