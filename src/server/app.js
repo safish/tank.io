@@ -24,8 +24,7 @@ class Playground extends Room {
 
     const frames = this.frames
 
-    frames[this.index] = frames[this.index] ||
-     Object.entries(this.operation)
+    frames[this.index] = frames[this.index] || Object.entries(this.operation)
 
     /* 同步最后操作 */
     // if (!frames[this.index].length) {
@@ -72,11 +71,11 @@ class Playground extends Room {
     /* 保存最后操作 */
     this.operation[client.sessionId] = data
 
-    frames[this.index] = frames[this.index] || []
-    frames[this.index].push([
-      client.sessionId,
-      data
-    ])
+    // frames[this.index] = frames[this.index] || []
+    // frames[this.index].push([
+    //   client.sessionId,
+    //   data
+    // ])
   }
 }
 

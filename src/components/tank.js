@@ -64,8 +64,6 @@ export default class extends PIXI.Sprite {
     if (code === 0) this.run(0)
     if (code === 1) this.run(6, Math.PI / 2)
     if (code & 16) this.shoot()
-
-
     // this.x -= Math.sin(this.rotation) * this.speed
     // this.y += Math.cos(this.rotation) * this.speed
   }
@@ -73,10 +71,6 @@ export default class extends PIXI.Sprite {
   update() {
     const
       parent = this.parent
-
-
-    // this.x += (shadow.x - this.x) * .3 * ratio
-    // this.y += (shadow.y - this.y) * .3 * ratio
 
     this.#bullets = this.#bullets.filter(bullet => {
       bullet.update()

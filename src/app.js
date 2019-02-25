@@ -11,7 +11,7 @@ prepare().then(() => {
   game.show()
 
 const
-  client = new colyseus.Client('ws://192.168.0.105:9000'),
+  client = new colyseus.Client('ws://172.16.48.242:9000'),
   key = new Proxy(
     {
       32: 0,
@@ -54,7 +54,6 @@ client.onOpen.add(err => {
       }
 
       case 'leave': {
-        console.log(data)
         delete store.player[data.id]
         for (let i = 0; i < store.frames.length; i++) {
           const frame = store.frames[i]
@@ -64,11 +63,6 @@ client.onOpen.add(err => {
       }
 
       default: {
-        // store.frames[index] = frame
-        // for (let i = 1; i < 3; i++) {
-        //   const j = index - i
-        //   store.frames[j] = store.frames[j] || frame
-        // }
         store.frames.push(data, data, data)
         break
       }
@@ -100,7 +94,7 @@ window.addEventListener('keyup', ev => {
 const node = document.querySelector('i')
 
 setInterval(() => {
-  node.innerText = store.frames.length
+  node.innerText = `${store.frames.length} FPS: ${core.ticker.FPS}`
 }, 1e3)
 
 core.ticker.add(() => {
@@ -108,6 +102,13 @@ core.ticker.add(() => {
   step()
   while (store.frames.length > 3) step()
 })
+
+// !function loop() {
+//   if (!store.joined) return
+//   step()
+//   while (store.frames.length > 3) step()
+//   setTimeout(loop, 16)
+// }()
 
 function step() {
   const frame = store.frames.shift()
