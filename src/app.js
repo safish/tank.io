@@ -101,8 +101,8 @@ setInterval(() => {
 
 core.ticker.add(() => {
   if (!store.joined) return
-  store.frames.length > 1 && step()
-  while (store.frames.length > 6) step()
+  step()
+  while (store.frames.length > 3) step()
 })
 
 function step() {

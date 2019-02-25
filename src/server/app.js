@@ -24,7 +24,7 @@ class Playground extends Room {
 
     const frames = this.frames
 
-    frames[this.index] = frames[this.index] || Object.entries(this.operation)
+    frames[this.index] = Object.entries(this.operation)
 
     this.broadcast(frames[this.index])
     this.index += 3
