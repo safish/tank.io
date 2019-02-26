@@ -5,44 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.3.1/dist/css/bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/eruda/1.5.4/eruda.min.js"></script>
-    <script>eruda.init()</script>
-    <style>
-      html, body {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-      }
+    <script>//eruda.init()</script>
 
-      body {
-        position: relative;
-      }
-
-      canvas {
-        display: block;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-      }
-
-      @media (orientation: portrait) {
-        canvas {
-          transform: rotate(90deg);
-        }
-      }
-
-      i {
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        font-style: normal;
-      }
-    </style>
   </head>
   <body>
-    <i></i>
     <canvas></canvas>
+    <!-- 初始输入框 -->
+    <section class="shadow d-flex flex-column align-items-center">
+      <section class="dialog d-flex flex-column justify-content-center">
+        <input type="text" class="form-control" placeholder="what's you name...">
+        <div class="feedback"></div>
+        <button class="btn join btn-primary">Join</button>
+      </section>
+    </section>
   </body>
 </html>

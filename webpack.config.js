@@ -7,6 +7,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
   entry: [
+    './src/styles/public.less',
     './src/app.js'
   ],
 
@@ -37,6 +38,14 @@ module.exports = {
       {
         test: /\.(vert|frag)$/,
         use: ['raw-loader']
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.less$/,
+        use: ['style-loader', 'css-loader', 'less-loader']
       }
     ]
   },

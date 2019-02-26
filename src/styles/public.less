@@ -1,0 +1,60 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  position: relative;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+@media (orientation: portrait) {
+  canvas {
+    transform: rotate(90deg);
+  }
+}
+
+.shadow {
+  background-color: rgba(0, 0, 0, .618);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  .dialog {
+    background-color: #fff;
+    width: 90%;
+    max-width: 16rem;
+    padding: 1rem 1rem;
+    margin: auto;
+    border-radius: .3rem;
+
+    .feedback {
+      visibility: hidden;
+      padding-left: .2rem;
+
+      &.ok {
+        visibility: visible;
+        color: var(--green);
+      }
+
+      &.retry {
+        visibility: visible;
+        color: var(--red);
+      }
+    }
+
+    .btn {
+      margin-top: .2rem;
+    }
+  }
+}
