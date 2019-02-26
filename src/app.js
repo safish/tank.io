@@ -10,7 +10,7 @@ prepare().then(() => {
   game.show()
 
 const
-  client = new colyseus.Client('ws://192.168.0.106:9000'),
+  client = new colyseus.Client('ws://172.16.48.242:9000'),
   key = new Proxy(
     {
       32: 0,
@@ -50,7 +50,6 @@ client.onOpen.add(err => {
           last = store.frames[i] || last
           store.frames[i] = last
         }
-        console.log('sync', store.frames)
         break
       }
 
@@ -64,7 +63,6 @@ client.onOpen.add(err => {
       }
 
       default: {
-        console.log('step')
         store.frames.push(data, data, data)
         break
       }
@@ -107,13 +105,11 @@ core.ticker.add(() => {
 
 function step() {
   const frame = store.frames.shift()
-  if (frame) {
-    // store.index++
+  if (frame && frame.length) {
     frame.forEach(item => {
       store.player[item[0]] = item[1]
       game.tank[item[0]] && game.tank[item[0]].operate(item[1])
     })
-    // console.log(frame)
     game.update()
   }
 }
