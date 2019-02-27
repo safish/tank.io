@@ -1,9 +1,22 @@
 const
   http = require('http'),
+  Router = require('koa-router'),
+  Koa = require('koa'),
   {Server, Room} = require('colyseus'),
-  server = new Server({server: http.createServer()})
+  app = new Koa(),
+  router = new Router(),
+  server = new Server({
+    server: http.createServer(app)
+  })
+
+
 
 class Playground extends Room {
+  requestJoin(opt) {
+    console.log(opt, this)
+    return false
+  }
+
   onInit() {
     this.maxClients = 8
     this.index = 0
@@ -69,9 +82,23 @@ class Playground extends Room {
   }
 }
 
+
+
+router
+  .get('/join', async ctx => {
+    ctx.body = 'ok'
+  })
+
+
+app
+  .use(async (ctx, next) => {
+    ctx.set({
+      'Access-Control-Allow-Origin': '*'
+    })
+    await next()
+  })
+  .use(router.routes())
+  .use(router.allowedMethods())
+
 server.register('playground', Playground)
 server.listen(9000)
-
-
-
-
