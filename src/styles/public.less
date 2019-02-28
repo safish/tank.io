@@ -39,16 +39,17 @@ canvas {
     border-radius: .3rem;
 
     .feedback {
-      visibility: hidden;
+      display: none;
       padding-left: .2rem;
+      margin-top: .5rem;
 
       &.ok {
-        visibility: visible;
+        display: block;
         color: var(--green);
       }
 
       &.retry {
-        visibility: visible;
+        display: block;
         color: var(--red);
       }
     }
@@ -66,6 +67,7 @@ canvas {
         display: inline-block;
         padding: 8px;
         transform: rotate(180deg);
+        cursor: pointer;
 
         &.active {
           background-color: #fc3;

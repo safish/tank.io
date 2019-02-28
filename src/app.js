@@ -9,4 +9,4 @@ import core, {monitor} from './core'
 //   console.log(await res.text())
 // })
 
-network.connect({name: 'client', skin: 0})
+// network.connect({name: 'client', skin: 0})

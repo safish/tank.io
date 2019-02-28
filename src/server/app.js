@@ -12,10 +12,7 @@ const
 
 
 class Playground extends Room {
-  requestJoin(opt) {
-    console.log(opt, this)
-    return false
-  }
+
 
   onInit() {
     this.maxClients = 8
@@ -23,7 +20,15 @@ class Playground extends Room {
     this.frames = []
     this.disposed = false
     this.operation = {}
+    this.player = {}
     this.update()
+  }
+
+  requestJoin(opt) {
+    const index = Object.values(this.player).findIndex(item => item.name === opt.name)
+    if (index !== -1) return false
+    this.player[opt.clientId] = {name: opt.name, skin: opt.skin}
+    return true
   }
 
   onDispose() {

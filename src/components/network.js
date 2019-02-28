@@ -1,13 +1,24 @@
 import * as colyseus from 'colyseus.js'
 
-const client = new colyseus.Client('ws://172.16.48.242:9000')
+const client = new colyseus.Client('ws://192.168.0.106:9000')
 
-let room
+function join({name, skin}) {
+  const room = client.join('playground', {name, skin})
+  room.onJoin.add(() => {
 
-function connect({name, skin}) {
-  room = client.join('playground', {name, skin})
+  })
+
+  room.onLeave.add(() => {
+
+  })
+
+  room.onMessage.add(() => {
+
+  })
 }
 
+
+
 export {
-  connect
+  join
 }
