@@ -2,7 +2,7 @@ import core, {monitor, Camera, engine} from '../core'
 import {Tank, store, Bullet, gamepad} from '../components'
 
 export default {
-  tank: {},
+  player: {},
 
   init() {
     this.container = new PIXI.Container()
@@ -28,31 +28,56 @@ export default {
       })
   },
 
-  update() {
-    for (const id in store.player) {
-      const tank = this.tank[id] || new Tank({
+  addPlayer(id, opt) {
+    const
+      {name, skin} = opt,
+      tank = new Tank({
         body: 'body.blue.png',
         barrel: 'barrel.blue.png'
       })
 
-      if (!tank.parent) {
-        tank.id = id
-        this.tank[id] = tank
-        id === store.id && this.camera.follow(tank)
-        this.camera.addChild(tank)
-      }
-    }
+    this.player[id] = tank
+    id === store.id && this.camera.follow(tank)
+    this.camera.addChild(tank)
+    return tank
+  },
 
-    for (const id in this.tank) {
-      if (store.player[id] === undefined) {
-        this.tank[id].destroy({children: true})
-        delete this.tank[id]
-      } else {
-        this.tank[id].update()
+  removePlayer(id) {
+    this.player[id].destroy({children: true})
+    delete this.player[id]
+  },
+
+  /* 步进 */
+  tick(piece) {
+    switch (piece[0]) {
+      case 'join': {
+        // console.log('join', piece[1])
+        !this.player[piece[1]] &&
+        this.addPlayer(piece[1], piece[2])
+        break
+      }
+
+      case 'leave': {
+        this.removePlayer(piece[1])
+        break
+      }
+
+      case 'update': {
+        const data = piece[1]
+        console.log(data)
+        for (const id in data) {
+          const player = this.player[id]
+          player && player.operate(data[id])
+        }
+        break
       }
     }
     engine.update()
-    this.camera.update()
+
+  },
+
+  update() {
+
   },
 
   show() {

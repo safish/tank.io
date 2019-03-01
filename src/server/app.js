@@ -12,21 +12,20 @@ const
 
 
 class Playground extends Room {
-
-
   onInit() {
-    this.maxClients = 8
     this.index = 0
     this.frames = []
     this.disposed = false
     this.operation = {}
     this.player = {}
     this.update()
+    console.log('init')
   }
 
   requestJoin(opt) {
-    const index = Object.values(this.player).findIndex(item => item.name === opt.name)
-    if (index !== -1) return false
+    // console.log('requestJoin')
+    // const index = Object.values(this.player).findIndex(item => item.name === opt.name)
+    // if (index !== -1) return false
     this.player[opt.clientId] = {name: opt.name, skin: opt.skin}
     return true
   }
@@ -40,37 +39,40 @@ class Playground extends Room {
   update() {
     if (this.disposed) return
 
-    const frames = this.frames
+    const frame = this.frames[this.index]
 
-    frames[this.index] = Object.entries(this.operation)
+    frame ? frame.push(['update', this.operation]) :
+      this.frames[this.index] = [['update', this.operation]]
 
-    this.broadcast(frames[this.index])
+    this.broadcast(['update', this.frames[this.index]])
     this.index += 3
 
     setTimeout(this.update.bind(this), 50)
   }
 
   onJoin(client) {
-    this.send(client, {
-      type: 'sync',
-      frames: this.frames
-    })
+    const
+      player = this.player[client.id],
+      frame = this.frames[this.index],
+      piece = ['join', client.sessionId, player]
+
+    frame ? frame.push(piece) : this.frames[this.index] = [piece]
+    this.send(client, ['sync', this.frames])
   }
 
   onLeave(client) {
-    const id = client.sessionId
+    const
+      id = client.sessionId,
+      frame = this.frames[this.index]
 
     delete this.operation[id]
 
-    for (let i = 0; i < this.frames.length; i++) {
-      const frame = this.frames[i]
-      frame && (this.frames[i] = frame.filter(item => item[0] !== id))
-    }
+    // for (let i = 0; i < this.frames.length; i++) {
+    //   const frame = this.frames[i]
+    //   frame && (this.frames[i] = frame.filter(item => item[0] !== id))
+    // }
 
-    this.broadcast({
-      id,
-      type: 'leave',
-    })
+    frame ? frame.push(['leave', id]) : this.frames[this.index] = [['leave', id]]
   }
 
   onMessage(client, data) {

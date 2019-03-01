@@ -1,4 +1,5 @@
 import {join} from './network'
+import {monitor} from '../core'
 
 {
   const btn = document.querySelector('.btn.join')
@@ -59,6 +60,12 @@ import {join} from './network'
     Array.from(container.children).forEach(item => item.classList.remove('active'))
 
     target.classList.add('active')
+  })
+
+  monitor.on('game:join', () => {
+    const cls = dialog.parentElement.classList
+    cls.remove('d-flex')
+    cls.add('d-none')
   })
 }
 
