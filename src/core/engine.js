@@ -5,16 +5,17 @@ const
   world = planck.World(planck.Vec2(0, 0)),
   step = 1 / PTM
 
-function update() {
+function tick() {
   for (let body = world.getBodyList(); body; body = body.getNext()) {
     if (!body.node) continue
     const
       node = body.node,
       point = body.getPosition()
 
+    // node.shadow.x = point.x * PTM
+    // node.shadow.y = point.y * PTM
     node.x = point.x * PTM
     node.y = point.y * PTM
-    node.rotation = body.getAngle()
   }
   world.step(step)
 }
@@ -23,8 +24,9 @@ world.on('begin-contact', contact => {
   const
     bodyA = contact.getFixtureA().getBody(),
     bodyB = contact.getFixtureB().getBody()
-  bodyA.collidable && bodyA.node.emit('begin-contact', bodyA, bodyB, contact)
-  bodyB.collidable && bodyB.node.emit('begin-contact', bodyB, bodyA, contact)
+
+  bodyA.interactive && bodyA.node.emit('begin-contact', bodyA, bodyB, contact)
+  bodyB.interactive && bodyB.node.emit('begin-contact', bodyB, bodyA, contact)
 })
 
 PIXI.DisplayObject.prototype.addBody = function(option={}) {
@@ -36,7 +38,7 @@ PIXI.DisplayObject.prototype.addBody = function(option={}) {
       ...option
     })
 
-  body.collidable = !!option.collidable
+  body.interactive = option.interactive
 
   /* not good, but ok */
   body.node = this
@@ -133,6 +135,6 @@ function getValue(v, e) {
 }
 
 export {
-  update,
+  tick,
   PTM
 }

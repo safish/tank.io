@@ -1,5 +1,5 @@
 import core, {monitor, Camera, engine} from '../core'
-import {Tank, store, Bullet, gamepad} from '../components'
+import {Player, store, Bullet, gamepad} from '../components'
 
 export default {
   player: {},
@@ -26,32 +26,36 @@ export default {
       .on('trackball:stop', () => {
         this.player.run(0)
       })
+
+    monitor
+      .on('player:destroy', id => {
+        if (id === store.id) {
+          this.camera.follow(null)
+        }
+        delete this.player[id]
+      })
   },
 
   addPlayer(id, opt) {
     const
       {name, skin} = opt,
-      tank = new Tank({
-        body: 'body.blue.png',
-        barrel: 'barrel.blue.png'
-      })
+      player = new Player({name, skin, id})
 
-    this.player[id] = tank
-    id === store.id && this.camera.follow(tank)
-    this.camera.addChild(tank)
-    return tank
+    this.player[id] = player
+    id === store.id && this.camera.follow(player)
+    this.camera.addChild(player)
+    return player
   },
 
   removePlayer(id) {
-    this.player[id].destroy({children: true})
+    this.player[id] && this.player[id].destroy()
     delete this.player[id]
   },
 
   /* 步进 */
-  tick(piece) {
+  step(piece) {
     switch (piece[0]) {
       case 'join': {
-        // console.log('join', piece[1])
         !this.player[piece[1]] &&
         this.addPlayer(piece[1], piece[2])
         break
@@ -64,7 +68,6 @@ export default {
 
       case 'update': {
         const data = piece[1]
-        console.log(data)
         for (const id in data) {
           const player = this.player[id]
           player && player.operate(data[id])
@@ -72,19 +75,22 @@ export default {
         break
       }
     }
-    engine.update()
-
   },
 
-  update() {
+  tick() {
+    engine.tick()
+  },
 
+  draw() {
+    this.camera.update()
+    for (const id in this.player) this.player[id].update()
   },
 
   show() {
     this.init()
     this.listen()
     core.stage.addChild(this.container)
-    // core.ticker.add(this.update.bind(this))
+    core.ticker.add(this.draw.bind(this))
   },
 
   hide() {

@@ -1,6 +1,7 @@
-export Tank from './tank'
+export Player from './player'
 export Bullet from './bullet'
 export store from './store'
 export gamepad from './gamepad'
 export ui from './ui'
 export * as network from './network'
+export sound from './sound'

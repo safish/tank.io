@@ -1,0 +1,30 @@
+{
+"frames": {
+	"tank.blue.png": {
+		"frame": {"x":0, "y":0, "w":84, "h":92},
+		"spriteSourceSize": {"x":0,"y":0,"w":84,"h":92},
+		"sourceSize": {"w":84,"h":92}
+	},
+	"tank.dark.png": {
+		"frame": {"x":84, "y":92, "w":84, "h":92},
+		"spriteSourceSize": {"x":0,"y":0,"w":84,"h":92},
+		"sourceSize": {"w":84,"h":92}
+	},
+	"tank.green.png": {
+		"frame": {"x":0, "y":92, "w":84, "h":92},
+		"spriteSourceSize": {"x":0,"y":0,"w":84,"h":92},
+		"sourceSize": {"w":84,"h":92}
+	},
+	"tank.sand.png": {
+		"frame": {"x":84, "y":0, "w":84, "h":92},
+		"spriteSourceSize": {"x":0,"y":0,"w":84,"h":92},
+		"sourceSize": {"w":84,"h":92}
+	}
+
+},
+"meta": {
+	"image": "tank.png",
+	"size": {"w": 168, "h": 184},
+	"scale": "1"
+}
+}

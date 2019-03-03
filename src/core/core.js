@@ -8,6 +8,8 @@ let {
   devicePixelRatio = 1
 } = window
 
+devicePixelRatio = 2
+
 const pixelRatio = Math.min(2, devicePixelRatio)
 
 /* 强制横屏 */

@@ -18,23 +18,24 @@ window.on = (...args) => {
 }
 
 document.on('touchstart', () => {
-  network.join({name: 'test', skin: 'blue'})
+  // network.join({name: 'test', skin: 'blue'})
+  // console.log('test')
 })
 
 core.ticker.add(() => {
-  step()
-  while (store.frames.length > 3) step()
+  tick()
+  while (store.frames.length > 3) tick()
 })
 
 
-function step() {
+function tick() {
   const
     frame = store.frames.shift(),
-    tick = game.tick.bind(game)
+    step = game.step.bind(game)
 
   if (frame && frame.length) {
-    frame.forEach(tick)
-    game.update()
+    frame.forEach(step)
+    game.tick()
   }
 }
 

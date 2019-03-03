@@ -11,18 +11,18 @@ import {monitor} from '../core'
 
 
     if (!name) {
-      feedback.textContent = '👆 Retry 👆'
-      feedback.classList.add('retry')
+      feedback.textContent = '👆 Input your name 👆'
+      feedback.classList.add('err')
       return
     }
 
     if (!skin) {
-      feedback.textContent = '👇 Choose your skins 👇'
-      feedback.classList.add('retry')
+      feedback.textContent = '👇 Choose your skin 👇'
+      feedback.classList.add('err')
       return
     }
 
-    feedback.classList.remove('retry')
+    feedback.classList.remove('err')
 
     join({name, skin: skin.dataset.skin})
 
@@ -62,11 +62,22 @@ import {monitor} from '../core'
     target.classList.add('active')
   })
 
-  monitor.on('game:join', () => {
-    const cls = dialog.parentElement.classList
-    cls.remove('d-flex')
-    cls.add('d-none')
-  })
+  monitor
+    .on('game:join', () => {
+      const cls = dialog.parentElement.classList
+      cls.remove('d-flex')
+      cls.add('d-none')
+    })
+    .on('game:rename', ev => {
+      const
+        shadow = document.querySelector('.shadow').classList,
+        feedback = document.querySelector('.feedback')
+
+      shadow.add('d-flex')
+      shadow.remove('d-none')
+      feedback.textContent = '👆 Retry 👆'
+      feedback.classList.add('err')
+    })
 }
 
 export default null

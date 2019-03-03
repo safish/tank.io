@@ -9,7 +9,8 @@ const
     server: http.createServer(app)
   })
 
-
+const
+  player = {}
 
 class Playground extends Room {
   onInit() {
@@ -17,16 +18,13 @@ class Playground extends Room {
     this.frames = []
     this.disposed = false
     this.operation = {}
-    this.player = {}
     this.update()
-    console.log('init')
   }
 
-  requestJoin(opt) {
-    // console.log('requestJoin')
-    // const index = Object.values(this.player).findIndex(item => item.name === opt.name)
+  requestJoin(opt, isNew) {
+    const index = Object.values(player).findIndex(item => item.name === opt.name)
     // if (index !== -1) return false
-    this.player[opt.clientId] = {name: opt.name, skin: opt.skin}
+    player[opt.clientId] = {name: opt.name, skin: opt.skin}
     return true
   }
 
@@ -39,10 +37,11 @@ class Playground extends Room {
   update() {
     if (this.disposed) return
 
-    const frame = this.frames[this.index]
+    const
+      frame = this.frames[this.index],
+      piece = ['update', {...this.operation}]
 
-    frame ? frame.push(['update', this.operation]) :
-      this.frames[this.index] = [['update', this.operation]]
+    frame ? frame.push(piece) : this.frames[this.index] = [piece]
 
     this.broadcast(['update', this.frames[this.index]])
     this.index += 3
@@ -52,9 +51,8 @@ class Playground extends Room {
 
   onJoin(client) {
     const
-      player = this.player[client.id],
       frame = this.frames[this.index],
-      piece = ['join', client.sessionId, player]
+      piece = ['join', client.sessionId, player[client.id]]
 
     frame ? frame.push(piece) : this.frames[this.index] = [piece]
     this.send(client, ['sync', this.frames])
@@ -66,26 +64,14 @@ class Playground extends Room {
       frame = this.frames[this.index]
 
     delete this.operation[id]
-
-    // for (let i = 0; i < this.frames.length; i++) {
-    //   const frame = this.frames[i]
-    //   frame && (this.frames[i] = frame.filter(item => item[0] !== id))
-    // }
+    delete player[client.id]
 
     frame ? frame.push(['leave', id]) : this.frames[this.index] = [['leave', id]]
   }
 
   onMessage(client, data) {
-    const frames = this.frames
-
     /* 保存最后操作 */
     this.operation[client.sessionId] = data
-
-    // frames[this.index] = frames[this.index] || []
-    // frames[this.index].push([
-    //   client.sessionId,
-    //   data
-    // ])
   }
 }
 

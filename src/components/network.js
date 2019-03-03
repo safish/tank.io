@@ -2,13 +2,16 @@ import * as colyseus from 'colyseus.js'
 import store from './store'
 import {monitor} from '../core'
 
-const client = new colyseus.Client('ws://172.16.48.242:9000')
+
 
 function join({name, skin}) {
-  const room = client.join('playground', {name, skin})
+  const
+    client = new colyseus.Client('ws://192.168.0.106:9000'),
+    room = client.join('playground', {name, skin})
 
-  room.onLeave.add(() => {
-
+  client.onError.add(err => {
+    const index = err.indexOf('Failed to auto-create')
+    if (index !== -1) monitor.emit('game:rename')
   })
 
   room.onJoin.add(() => {
