@@ -44,7 +44,7 @@ class Playground extends Room {
     frame ? frame.push(piece) : this.frames[this.index] = [piece]
 
     this.broadcast(['update', this.frames[this.index]])
-    this.index += 3
+    this.index += 2
 
     setTimeout(this.update.bind(this), 50)
   }

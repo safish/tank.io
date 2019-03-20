@@ -81,7 +81,7 @@ export default {
     engine.tick()
   },
 
-  draw() {
+  update() {
     this.camera.update()
     for (const id in this.player) this.player[id].update()
   },
@@ -90,7 +90,7 @@ export default {
     this.init()
     this.listen()
     core.stage.addChild(this.container)
-    core.ticker.add(this.draw.bind(this))
+    core.ticker.add(this.update.bind(this))
   },
 
   hide() {
