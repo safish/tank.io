@@ -1,4 +1,4 @@
-import {join} from './network'
+import {join} from './net'
 import {monitor} from '../core'
 
 {

@@ -1,19 +1,61 @@
-const app = new PIXI.Application({
-  view: document.querySelector('canvas'),
-  width: 1336,
-  height: 750
+import {store, network} from './components'
+import {prepare, game} from './scenes'
+import core, {monitor} from './core'
+
+prepare().then(() => {
+  game.show()
 })
 
-const g = new PIXI.Graphics()
-  .beginFill(0xffcc33)
-  .drawCircle(0, 0, 30)
-  .endFill()
+EventTarget.prototype.on = function(...args) {
+  this.addEventListener(...args)
+  return this
+}
 
-app.stage.addChild(g)
-g.y = 300
 
-let i = 0
-app.ticker.add(() => {
-  if (i) return i = 0
-  g.x += 5
+window.on = (...args) => {
+  window.addEventListener(...args)
+  return window
+}
+
+document.on('touchstart', () => {
+  // network.join({name: 'test', skin: 'blue'})
+  // console.log('test')
 })
+
+core.ticker.add(() => {
+  tick()
+  while (store.frames.length > 3) tick()
+})
+
+
+function tick() {
+  const
+    frame = store.frames.shift(),
+    step = game.step.bind(game)
+
+  if (frame && frame.length) {
+    frame.forEach(step)
+    game.tick()
+  }
+}
+
+const key = new Proxy(
+  {32: 0, 37: 0, 38: 0, 39: 0, 40: 0},
+  {
+    set(target, key, value) {
+      if (target[key] !== value && target[key] !== undefined) {
+        target[key] = value
+        monitor.emit('action:update', target)
+      }
+      return true
+    }
+  }
+)
+
+window
+  .on('keydown', ev => {
+    key[ev.keyCode] = 1
+  })
+  .on('keyup', ev => {
+    key[ev.keyCode] = 0
+  })

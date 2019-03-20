@@ -43,6 +43,8 @@ const app = new PIXI.Application({
   backgroundColor: 0xffffff
 })
 
+console.log(app.renderer)
+
 app.align = function(node, option={}) {
   const
     {top, left, right, bottom} = option,

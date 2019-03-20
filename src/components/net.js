@@ -36,7 +36,7 @@ function join({name, skin}) {
       }
 
       case 'update': {
-        store.frames.push(data[1], data[1])
+        store.frames.push(data[1], data[1], data[1])
         break
       }
     }
